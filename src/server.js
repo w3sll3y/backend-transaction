@@ -13,10 +13,6 @@ app.use(cors());
 app.use(routes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
-
 app.listen(PORT, () => {
   console.log(`Listening on port`, PORT);
 });

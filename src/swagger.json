@@ -1,0 +1,340 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de login e transação",
+    "description": "Essa API tem como objetivo criar contas, logar nas contas e criar simulações de transações de compra de cartões",
+    "contact": {
+      "email": "fernandess.weslley@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/",
+      "description": "API de teste"
+    }
+  ],
+  "paths": {
+    "/signup": {
+      "post": {
+        "summary": "Cadastro de usuário",
+        "description": "Essa rota será responsável por cadastrar novos usuários",
+        "tags": [
+          "Signup",
+          "Usuário"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Signup"
+              },
+              "examples": {
+                "signup": {
+                  "value": {
+                    "nome": "Nikola Tesla",
+                    "email": "Nik@gmail.com",
+                    "password": "Nik.2024"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Erro ao cadastrar"
+          },
+          "200": {
+            "description": "Criação finalizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Signup"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Login de usuário",
+        "description": "Essa rota será responsável por logar usuários",
+        "tags": [
+          "Login",
+          "Usuário"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              },
+              "examples": {
+                "signup": {
+                  "value": {
+                    "email": "Nik@gmail.com",
+                    "password": "Nik.2024"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "Usuario nao encontrado"
+          },
+          "200": {
+            "description": "Login feito com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Login"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "summary": "Dados do usuário",
+        "description": "Essa rota será responsável por listar dados do usuário",
+        "tags": [
+          "Usuário"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "signup": {
+                  "value": {
+                    "email": "Nik@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Usuario não encontrado"
+          },
+          "200": {
+            "description": "Dados carregados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/new-transaction": {
+      "post": {
+        "summary": "Cadastro de transação",
+        "description": "Essa rota será responsável por cadastrar novas transações",
+        "tags": [
+          "Transação",
+          "Usuário"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Transaction"
+              },
+              "examples": {
+                "signup": {
+                  "value": {
+                    "name": "Nikola Tesla",
+                    "numberCard": "9999 9999 9999 9999",
+                    "valueTransaction": "23.90",
+                    "dueDate": "01/01",
+                    "validateCode": "123",
+                    "createdAt": "01/01/2000",
+                    "createdBy": "00034a60-05f7-4ce1-8468-ff3774d59a6d"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "Erro ao processar"
+          },
+          "200": {
+            "description": "Transação finalizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Transaction"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "summary": "Listagem de transações",
+        "description": "Essa rota será responsável por listar todas transações de um usuário",
+        "tags": [
+          "Transação",
+          "Usuário"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Trasações por ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Erro ao encontrar usuário"
+          },
+          "200": {
+            "description": "Listagem feita com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/GetTransaction"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Signup": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "numberCard": {
+            "type": "string"
+          },
+          "valueTransaction": {
+            "type": "string"
+          },
+          "dueDate": {
+            "type": "string"
+          },
+          "validateCode": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          }
+        }
+      },
+      "GetTransaction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "valueTransaction": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

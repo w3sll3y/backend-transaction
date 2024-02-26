@@ -49,7 +49,7 @@ routes.post('/login', (req, res) => {
   
   db.query(sql, [email, password], (err, data) => {
     if(err) {
-      return res.status(500).json({message: 'Usuario nao encontrado'});
+      return res.status(404).json({message: 'Usuario nao encontrado'});
     }
     if(data?.length > 0 ) {
       const id = data[0].id;
@@ -81,7 +81,7 @@ routes.get('/transactions/:id', verifyJwt, (req, res) => {
     if(data) {
       return res.status(200).json(data)
     } else {
-      return res.status(500).json({message: "Erro ao processar"})
+      return res.status(404).json({message: "Erro ao processar"})
     }
   })
 });
@@ -93,7 +93,7 @@ routes.post('/new-transaction', verifyJwt, (req, res) => {
   const values = [id, name, valueTransaction, createdAt, createdBy, dueDate, validateCode, numberCard ];
   db.query(sql, values, (err, data) => {
     if (err) {
-      return res.json({message: "Erro ao processar"});
+      return res.status(404).json({message: "Erro ao processar"});
     }
     return res.status(200).json({message: "Transacao concluida com sucesso"});
   })
